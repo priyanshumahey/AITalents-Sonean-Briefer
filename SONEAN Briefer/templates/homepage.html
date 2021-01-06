@@ -1,0 +1,68 @@
+<html>
+
+<head>
+
+
+    <title>SONEAN Briefer</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        <div class="introduction">
+            <h1 class="intro">SONEAN Briefer</h1>
+            <h3 class="intro">Intelligence at your fingertips</h3>
+        </div>
+        <div class="form-box">
+            <p class="intro" id="info">Login to access the dashboard or register for an account</p>
+            <div class="button-box">
+                <div id="btn"></div>
+                <button type="button" class="toggle-btn" onclick="login()">Login</button>
+                <button type="button" class="toggle-btn" onclick="register()">Register</button>
+            </div>
+            <form id="login" class="input-group" method="get" action="{{ url_for('dashboard_home') }}">
+                <input type="text" class="input-field" placeholder="Username" name="username" value="{{
+            request.form.username }}" required>
+                <input type="password" class="input-field" placeholder="Password" name="password" value="{{
+            request.form.password }}" required>
+                <input type="checkbox" class="check-box"><span>Remember Password</span>
+                <button type="submit" class="submit-btn">Login</button>
+            </form>
+            <form id="register" class="input-group" method="post">
+                <input type="text" class="input-field" placeholder="Username" name="username" value="{{
+            request.form.username }}" required>
+                <input type="email" class="input-field" placeholder="Email Address" name="email" value="{{
+            request.form.email }}" required>
+                <input type="password" class="input-field" placeholder="Password" name="password" value="{{
+            request.form.password }}" required>
+                <input type="checkbox" class="check-box" required><span>I agree to the terms & conditions</span>
+                <button type="submit" class="submit-btn">Register</button>
+            </form>
+        </div>
+        {% if error %}
+        <p class="error">
+            <strong>Error:</strong> {{ error }}
+            {% endif %}
+
+    </div>
+    <script>
+        var x = document.getElementById("login");
+        var y = document.getElementById("register");
+        var z = document.getElementById("btn");
+
+        function register() {
+            x.style.left = "-400px";
+            y.style.left = "50px";
+            z.style.left = "110px";
+        }
+
+        function login() {
+            x.style.left = "50px";
+            y.style.left = "450px";
+            z.style.left = "0";
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="Dashboard" content="noindex">
+    <title>SONEAN Dashboard</title>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+            crossorigin="anonymous"></script>
+    <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main_dashboard.css') }}">
+    <script type='text/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='js/map_chart.js')}}"></script>
+
+
+    <script type='text/javascript'>
+    $(window).load(function(){
+      var data = {{data|tojson}};
+      var columns = {{columns|tojson}};
+
+      $(function() {
+        $('#table').bootstrapTable({
+          data: data,
+          columns: columns,
+        });
+
+      });
+
+    });
+    </script>
+
+
+</head>
+<body class="page">
+
+    <div class="navbar">
+        <ul>
+            <li><a href="#Competitors">Competitors</a></li>
+            <li><a href="#Industry">Industry</a></li>
+            <li class="dropdown">
+                <a href="javascript:void(0)" class="dropbtn">Product</a>
+                <div class="dropdown-content">
+                    <a href="#">ALL</a>
+                    <a href="#">Harvestors</a>
+                    <a href="#">Tractors</a>
+                </div>
+            </li>
+            <li class="search-submit">
+                <form class="navbar-form navbar-left" action="">
+                    <div class="form-group">
+                        <input type="text" class="form-search" placeholder="Search.." name="search">
+                    </div>
+                    <button type="submit" class="btn-default">Submit</button>
+                </form>
+            </li>
+            <li class="nb-right">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#"><span class="glyphicon glyphicon-user"></span>User</a></li>
+                    <li><a href="{{ url_for('homepage') }}"><span class="glyphicon glyphicon-log-out"></span>Log Out</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="briefing">
+        <h3>Daily Briefing</h3>
+        <p>
+            According to 2019 results of Claas' Excellence System (CXS),
+            Claas’ Russian plant in Krasnodar was the best of the 13 enterprises of the Claas group,
+            receiving the highest result of 98.2%. In addition, the Russian plant has maintained its
+            leadership in product quality for the second year in a row. CXS is Claas’ internal management
+            system for evaluating the effectiveness of the management of production and administration
+            processes at Claas’ facilities. CXS is based on Lean Management and strives for continuous
+            improvement by identifying bottlenecks and eliminating losses. Every year all facilities
+            report on key indicators on the efficiency of production and logistics processes, the level
+            motivation and involvement of staff as well as product quality. Among all Claas facilities,
+            the plant in Krasnodar is the youngest. According to the management of the plant, this result
+            shows that the quality and reliability of products Russian farmers demand are higher than
+            farmers in Western countries. (SONEAN: Claas also added two new full line dealers in Georgia
+            and South Carolina, USA. See the context for details)
+        </p>
+        <a class="previous">GO TO PREVIOUS DAILY BRIEFINGS</a><br>
+        <a class="video" href="{{ url_for('briefing') }}">GO TO THE LATEST WEEKLY VIDEO BRIEFING</a>
+    </div>
+
+    <div class="chatbot">
+        <button id="btn" onclick='recognition.start()'>
+            <svg  xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="current" class="bi bi-mic" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z" />
+                <path fill-rule="evenodd" d="M10 8V3a2 2 0 1 0-4 0v5a2 2 0 1 0 4 0zM8 0a3 3 0 0 0-3 3v5a3 3 0 0 0 6 0V3a3 3 0 0 0-3-3z" />
+            </svg>
+        </button>
+        <h1 id="result"></h1>
+        <script>
+            const btn = document.getElementById('btn');
+
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const recognition = new SpeechRecognition();
+
+            recognition.onstart = function () {
+                console.log('You can speak now!!!');
+            }
+
+            recognition.onresult = function (event) {
+                var text = event.results[0][0].transcript;
+                console.log(text);
+                document.getElementById('result').innerHTML = text;
+                read(text);
+            }
+
+            function read(text) {
+                var speech = new SpeechSynthesisUtterance();
+                speech.text = text;
+                if (text.includes('time'))
+                    speech.text = 'It is ' + new Date().getHours() + " " + new Date().getMinutes() + " right now";
+                else if (text.includes('Thailand'))
+                    speech.text = 'The Thai Bank for Agriculture and Agricultural Cooperatives (BAAC) is cooperating with Japanese manufacturer Yanmar to support agricultural machinery loans. Please reference the table below for more info ';
+                else if (text.includes('latest'))
+                    speech.text = 'In Thailand Siam Kubota signed a memorandum of cooperation with the Ministry of Labour to help those affected by the Coronavirus crisis. Please reference the table below for more info.';
+                else if (text.includes('Poland'))
+                    speech.text = 'ContentIn Poland, Kubota and Santander Leasing are cooperating when it comes to factory financing of agricultural machinery and equipment.  Please reference the table below for more info';
+                window.speechSynthesis.speak(speech);
+            }
+        </script>
+    </div>
+
+    <div class="container">
+        <h3>{{title}}</h3>
+        <br />
+        <div id="toolbar"></div>
+        <table id="table"
+               data-toggle="true"
+               data-toolbar="#toolbar"
+               data-search="true"
+               column-search="true"
+               data-show-columns="true"
+               data-pagination="true"
+               data-height="700">
+        </table>
+    </div>
+
+    <div id="main" class="worldmap">
+        <div id="header">
+            <h1 class="text-center">World Map</h1>
+        </div>
+        <div id="content">
+            <div class="row">
+                <div class="col-xs-8 col-xs-offset-2">
+                    <select id="categories" class="form-control">
+                        <option value="">Select category</option>
+                    </select>
+                    <div id="chart_div"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

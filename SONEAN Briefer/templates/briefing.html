@@ -1,0 +1,17 @@
+{% extends 'base.html'%}
+
+
+{% block head %} 
+<title>Briefing</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+{% endblock %}
+
+
+
+{% block body %} 
+<h2>Welcome to your briefing! This is a weekly briefing video for you!</h2>
+<video class="video" width="320" height="240" controls>
+  <source src={{ url_for('static', filename="demo.mp4") }} type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+{% endblock %}
