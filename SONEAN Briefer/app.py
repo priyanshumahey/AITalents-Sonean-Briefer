@@ -39,8 +39,8 @@ def validate_value(value):
 
 
 #Data for the table
-gsheet = "1knJxfU9vrlQzMyZPTRJhjyS4dYhJs1awJJ7TRO7BkQE"
-gsheet = "1vT3Bi-ku-y1I6737hbJjWvlNXKg7C82tQSIMLvNdOrQ"
+gsheet = ""
+gsheet = ""
 
 sheet_name = "Claas"
 gsheet_url = "https://docs.google.com/spreadsheets/d/{}/gviz/tq?tqx=out:csv&sheet={}".format(gsheet, sheet_name)
